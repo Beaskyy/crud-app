@@ -1,19 +1,22 @@
 const express = require("express");
 const mongoose = require("mongoose");
+
+const productRouter = require("./routes/product")
+
 const dotenv = require("dotenv").config();
+
 const app = express();
 
-const server = app.get("/", (req, res) => {
-  res.json({
-    message: "Good morning, Maria",
-  });
-});
+app.use(express.json());
+
+app.use("/api/products", productRouter);
+app.use("/api/products/:id", productRouter);
 
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => {
     console.log("connected to database");
-    server.listen(3000, () => {
+    app.listen(3000, () => {
       console.log("listening on port 3000...");
     });
   })
